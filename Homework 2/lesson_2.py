@@ -1,5 +1,5 @@
 import string
-from random import randint, choice, shuffle
+from random import randint, choice, choices, shuffle
 import pandas as pd
 from flask import Flask
 
@@ -13,20 +13,19 @@ def generate_password() -> str:
     2. Will contain at least one lowercase, uppercase, special characters and a digit
     3. Will fill out any spaces left with random characters from the list above"""
 
-    pass_length = randint(10, 20)
-    str_lower: str = string.ascii_letters[:26]
-    str_upper: str = string.ascii_letters[26:]
-    numbers: str = "0123456789"
-    special: str = "!@#$%^&*()+"
-    requirements = (str_lower, str_upper, numbers, special)
+    password_length = randint(10, 20)
+    string_lower: str = string.ascii_lowercase
+    string_upper: str = string.ascii_uppercase
+    digits: str = string.digits
+    special: str = string.punctuation
+    requirements = (string_lower, string_upper, digits, special)
 
-    pass_list = [choice(req) for req in requirements]
+    password_list = [choice(req) for req in requirements]
 
-    while len(pass_list) < pass_length:
-        pass_list.append(choice(choice(requirements)))
+    password_list.extend(choices("".join(requirements), k=password_length - len(password_list)))
 
-    shuffle(pass_list)
-    password = "".join(pass_list)
+    shuffle(password_list)
+    password = "".join(password_list)
     return password
 
 
