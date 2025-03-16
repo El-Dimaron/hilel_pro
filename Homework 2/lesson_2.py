@@ -41,3 +41,4 @@ def calculate_average(path: str = "hw.csv") -> str:
 
 
 app.run(port=5001, debug=True)
+
