@@ -1,4 +1,7 @@
 import csv
+import json
+import pprint
+
 import pandas as pd
 from flask import Flask
 from faker import Faker
@@ -52,21 +55,23 @@ def get_bitcoin_value(currency, count):
             bitcoin_value = dictionary["rate"] * count
             break
 
-    url_currencies = "https://test.bitpay.com/currencies"
+    url_currencies = "https://bitpay.com/currencies"
     response_currencies = httpx.get(url_currencies)
 
     currencies_symbols_dict = response_currencies.json()
 
+    symbol = None
     for dictionary in currencies_symbols_dict["data"]:
         if dictionary.get("code") == currency:
             symbol = dictionary["symbol"]
             break
-        else:
-            return f"Error: currency code {currency} is not in the list of supported currencies. Please check the code."
+
+    if not symbol:
+        return f"Error: currency code {currency} is not in the list of supported currencies. Please check the code."
 
     return f"The value of {count} bitcoin(s): {bitcoin_value}{symbol}"
 
 
-# http://127.0.0.1:5001/generate_students?currency=UAH&count=10
+# http://127.0.0.1:5001/get_bitcoin_value
 
 app.run(port=5001, debug=True)
