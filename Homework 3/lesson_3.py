@@ -1,12 +1,10 @@
 import csv
-import json
-import pprint
-
 import pandas as pd
 from flask import Flask
 from faker import Faker
 from webargs.flaskparser import use_kwargs
 from validator import generate_students_validator, get_bitcoin_value_value_validator
+from http import HTTPStatus
 import httpx
 
 app = Flask(__name__)
@@ -43,21 +41,19 @@ def generate_students(count, country):
 @app.route('/get_bitcoin_value')
 @use_kwargs(get_bitcoin_value_value_validator, location="query")
 def get_bitcoin_value(currency, count):
-    """Function is used to check the value of the bitcoin for the provided currency and amount."""
+    """Function is used to check the value of the bitcoin for the provided currency and amount.
+    Note: works with basic non-crypto currencies (e.g. USD, UAH, GBP etc.)."""
 
-    url_rates = "https://bitpay.com/api/rates"
-    response_rates = httpx.get(url_rates)
+    url_rate = f"https://bitpay.com/api/rates/{currency.lower()}"
+    response_currency_rate = httpx.get(url_rate)
 
-    rates_dict = response_rates.json()
+    if response_currency_rate.status_code != HTTPStatus.OK:
+        return f"Error: something went wrong with {url_rate}."
 
-    for dictionary in rates_dict:
-        if dictionary.get("code") == currency:
-            bitcoin_value = dictionary["rate"] * count
-            break
+    bitcoin_value = response_currency_rate.json().get("rate") * count
 
     url_currencies = "https://bitpay.com/currencies"
     response_currencies = httpx.get(url_currencies)
-
     currencies_symbols_dict = response_currencies.json()
 
     symbol = None
