@@ -168,6 +168,7 @@ cython_debug/
 .idea/
 'Homework 4'/chinook.db
 'Homework 4'/test.py
+.DS_Store
 
 # PyPI configuration file
 .pypirc
