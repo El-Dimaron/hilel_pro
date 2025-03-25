@@ -27,20 +27,15 @@ def stats_by_city(style: str) -> str:
     if not style:
         return "Please specify a genre name"
 
-    cities_list: list = execute_query(query, (style,))
+    cities_list: list = execute_query(query, (style, ))
 
     if not cities_list:
         return "The genre name is not in the list. Please check the entered name."
 
-    result: list = [cities_list[0][0]]
     quantity: int = cities_list[0][2]
-    for city in cities_list[1:]:
-        if city[2] == quantity:
-            result.append(city[0])
-        else:
-            break
+    result = [city[0] for city in cities_list]
 
-    message = f"Top {style} {"city" if len(result) == 1 else "cities"}: {', '.join(result)} ({quantity})"
+    message = f"Top {style} {"city" if len(result) == 1 else "cities"}: {', '.join(result)} ({quantity})."
     return message
 
 
