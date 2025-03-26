@@ -1,6 +1,3 @@
-# 2. Реалізувати метод square в фігурах які залишилися. (Triangle+Parallelogram).
-# Triangle - треба створити клас
-
 import math as m
 
 
