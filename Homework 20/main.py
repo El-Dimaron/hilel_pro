@@ -16,7 +16,6 @@ class Fibonacci:
             self.cache.append(fib_number)
 
         return self.cache[n]
-        # return self.cache
 
 
 def formatted_name(first_name, last_name, middle_name=''):
