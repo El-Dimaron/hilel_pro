@@ -1,9 +1,15 @@
-from typing import Generator, Callable
+class map:
+    def __init__(self, dictionary, function_1, function_2):
+        self.i_dictionary = iter(dictionary.items())
+        self.function_1 = function_1
+        self.function_2 = function_2
 
+    def __iter__(self):
+        return self
 
-def custom_map(dictionary: dict, function_1: Callable, function_2: Callable) -> Generator:
-    for key, value in dictionary.items():
-        yield tuple((function_1(key), function_2(value)))
+    def __next__(self):
+        key, value = next(self.i_dictionary)
+        return tuple((self.function_1(key), self.function_2(value)))
 
 
 ########
@@ -28,4 +34,4 @@ def func_2(n):
     return n ** 2
 
 
-print(list(custom_map(dictionary=test_dict, function_1=func_1, function_2=func_2)))
+print(list(map(dictionary=test_dict, function_1=func_1, function_2=func_2)))
